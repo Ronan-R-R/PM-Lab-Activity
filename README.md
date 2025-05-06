@@ -94,4 +94,3 @@ Each team prepares a presentation (10+ slides, 8–15 mins) covering:
 
 - [Docker Documentation](https://docs.docker.com/)
 - [VS Code Docker Extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
-- [Original Notification System Repo](https://github.com/instructor/student-notification-system)
