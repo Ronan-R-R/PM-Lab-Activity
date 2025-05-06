@@ -1,104 +1,111 @@
-# What is Postman?
-Postman is a popular API client that allows developers to test, develop, and document RESTful APIs. It provides a user-friendly interface to send requests and inspect responses without writing code or using command-line tools like curl.
+# Postman Test Guide
 
-# Why Do We Use Postman?
-- To test APIs by sending HTTP requests (GET, POST, PUT, DELETE, etc.).
-- To debug APIs and view response details such as status codes, headers, and body.
-- To automate API workflows and create test scripts.
-- To simulate real-world API usage during development.
-- To avoid typos and malformed JSON that might happen when using the terminal.
+This guide outlines how to test the Student Notification System using Postman.
 
-# How Postman Works
-- You create a request (e.g. a POST request to an endpoint).
-- You choose the method (GET, POST, etc.).
-- You enter the URL (e.g. http://localhost:5001/send-notification).
-- You set the headers (e.g. Content-Type: application/json).
-- You enter the request body (usually in JSON format).
-- You click Send and Postman gives you:
-- The response status (e.g. 200 OK or 404 Not Found).
-- The response body (e.g. { "status": "sent" }).
-- The headers, response time, and size.
+---
 
-  ============================================================
+## Prerequisites
 
-# The Problem and how I fixed it.
+Ensure the following before proceeding:
 
-# Problem 1: 404 Not Found
-Cause: I was using the incorrect URL endpoint in Postman:
+- Docker and Docker Compose are installed and running.
+- The application services are up and running via Docker Compose.
+- Postman is installed on your system.
 
+---
 
-http://localhost:5001/notify
-Why: I assumed /notify was a valid route.
-Fix: I checked the app.py code and saw the correct endpoint was:
-http://localhost:5001/send-notification
+## Getting Started
 
-What I did:
-Updated the request URL in Postman to /send-notification.
-Retested the request.
+1. **Clone the Repository**
 
-# Problem 2: Random Behavior in Responses
+   ```bash
+   git clone https://github.com/Ronan-R-R/PM-Lab-Activity.git
+   cd PM-Lab-Activity
+   ```
 
-Cause: The /send-notification endpoint randomly returned sent, skipped, or duplicate.
-Why it was a problem: I needed consistent, predictable test results in Postman.
-Fix:
-Modified the code to support a query parameter: ?disable_random=true
-Then used this URL in Postman:
-http://localhost:5001/send-notification?disable_random=true
-Result: The response became consistent with:
+2. **Start the Services**
 
+   ```bash
+   docker-compose up -d
+   ```
 
-{
-  "status": "sent",
-  "student_id": 123,
-  "message": "Test notification"
-}
+   This command will start all the necessary services in detached mode.
 
-# Problem 3: Incorrect Headers
+3. **Verify Service Status**
 
-Cause: I initially forgot to set the Content-Type: application/json header in Postman.
-Why it matters: The server expects JSON input. Without this header, it couldn’t parse the request.
-Fix:
-In Postman, went to the Headers tab.
-Added:
-Key: Content-Type
-Value: application/json
+   Ensure all services are running:
 
-# Problem 4: Missing Request Body
-Cause: I didn’t enter a request body or used incorrect formatting.
+   ```bash
+   docker ps
+   ```
 
-Fix:
-Went to Body > raw > JSON in Postman.
-Entered:
+   You should see containers for `notification-service`, `redis`, and any other relevant services.
 
+---
 
-{
-  "student_id": 123,
-  "message": "Test notification"
-}
+## Testing with Postman
 
-# Final Testing Setup in Postman
+1. **Import the Postman Collection**
 
-Method: POST
+   - Open Postman.
+   - Click on **Import**.
+   - Select the `postman_collection.json` file located in the project root directory.
 
-URL:http://localhost:5001/send-notification?disable_random=true
+2. **Configure the Environment (If Applicable)**
 
-Headers:
+   - Set up any required environment variables, such as `{{base_url}}`, to point to your local services.
 
-pgsql
-Content-Type: application/json
-Body (raw > JSON):
+3. **Send a Test Notification**
 
+   - In the imported collection, locate the **Send Notification** request.
+   - Click **Send** to dispatch a test notification.
 
+4. **Verify the Response**
 
-{
-  "student_id": 123,
-  "message": "Test notification"
-}
+   - A successful response should return a status code `200 OK`.
+   - The response body should confirm that the notification was sent.
 
-The Output:
+5. **Check Redis for Messages**
 
-{
-  "status": "sent",
-  "student_id": 123,
-  "message": "Test notification"
-}
+   - Access the Redis CLI:
+
+     ```bash
+     docker exec -it <redis_container_name> redis-cli
+     ```
+
+   - Verify that the message was published to the appropriate channel.
+
+---
+
+## Troubleshooting
+
+- **No Response or Errors**
+
+  - Check if the `notification-service` container is running:
+
+    ```bash
+    docker ps
+    ```
+
+  - Review logs for any errors:
+
+    ```bash
+    docker logs notification-service
+    ```
+
+- **Redis Connection Issues**
+
+  - Ensure that the `notification-service` is correctly configured to connect to Redis.
+  - Verify Redis is running and accessible.
+
+- **Postman Environment Variables**
+
+  - Confirm that all necessary environment variables in Postman are correctly set.
+
+---
+
+## Conclusion
+
+By following this guide, you should be able to test the notification functionality of the Student Notification System using Postman. Ensure all services are running correctly and that Postman is properly configured to interact with them.
+
+---
