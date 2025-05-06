@@ -3,7 +3,7 @@
 
 This repository documents a lab project aimed at identifying, analyzing, and resolving a problem in a Dockerized microservice-based **Student Notification System**. The project emphasizes teamwork, communication, and structured planning in a DevOps setting using tools like Docker, Visual Studio Code, and GitHub.
 
-## 📌 Lab Objective
+## Lab Objective
 
 To simulate a real-world development environment where a team must:
 
@@ -12,7 +12,7 @@ To simulate a real-world development environment where a team must:
 - Collaborate to propose and plan a resolution.
 - Document tasks, responsibilities, and timelines.
 
-## 🛠 Lab Setup
+## Lab Setup
 
 ### Prerequisites
 
@@ -39,7 +39,7 @@ docker ps
 docker-compose logs notification-service
 ```
 
-## ✅ Lab Activities & Deliverables
+## Lab Activities & Deliverables
 
 ### Task 1: Define the Problem (PA0101 / IAC0101)
 
@@ -68,7 +68,7 @@ docker-compose logs notification-service
 - Define tasks, assign team members.
 - Document in `TASK_PLAN.md`.
 
-## 🧾 Presentation Guidelines
+## Presentation Guidelines
 
 Each team prepares a presentation (10+ slides, 8–15 mins) covering:
 
@@ -79,7 +79,7 @@ Each team prepares a presentation (10+ slides, 8–15 mins) covering:
 5. Task Execution Plan
 6. Team Reflections
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── problem-report.md
@@ -90,7 +90,7 @@ Each team prepares a presentation (10+ slides, 8–15 mins) covering:
 └── README.md
 ```
 
-## 📚 Resources
+## Resources
 
 - [Docker Documentation](https://docs.docker.com/)
 - [VS Code Docker Extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
