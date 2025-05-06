@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify
 import random
 
@@ -10,15 +9,38 @@ def send_notification():
     student_id = data.get('student_id')
     message = data.get('message')
 
-    # Simulated bug: randomly skip or duplicate
-    outcome = random.choice(['success', 'duplicate', 'skip'])
+    # Check if random behavior is disabled
+    disable_random = request.args.get('disable_random', 'false').lower() == 'true'
 
-    if outcome == 'skip':
+    if disable_random:
+        # Always return a successful "sent" response
+        return jsonify({
+            "status": "sent",
+            "student_id": student_id,
+            "message": message
+        }), 200
+
+    # Simulate random response: success, duplicate, or skip
+    outcome = random.choice(['sent', 'duplicate', 'skipped'])
+
+    if outcome == 'skipped':
         return jsonify({"status": "skipped"}), 200
     elif outcome == 'duplicate':
-        return jsonify({"status": "duplicate", "student_id": student_id}), 200
+        return jsonify({
+            "status": "duplicate",
+            "student_id": student_id
+        }), 200
     else:
-        return jsonify({"status": "sent", "student_id": student_id, "message": message}), 200
+        return jsonify({
+            "status": "sent",
+            "student_id": student_id,
+            "message": message
+        }), 200
+
+@app.route('/notify', methods=['POST'])
+def notify():
+    # Redirect /notify to the main send-notification handler
+    return send_notification()
 
 @app.route('/status', methods=['GET'])
 def status():
