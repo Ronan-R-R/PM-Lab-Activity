@@ -94,7 +94,7 @@ docker ps
 **URL:** `http://localhost:5001/send-notification?disable_random=true`
 
 **Headers:**
-```http
+http
 Content-Type: application/json
 
 {
